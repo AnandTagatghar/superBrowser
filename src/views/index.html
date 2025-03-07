@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>my-supper-browser</title>
+  <link rel="stylesheet" href="../style/index.css">
+</head>
+
+<body>
+  <div class="navbar">
+    <div id="tabs-container" class="tabs-container"></div>
+    <div class="window-controls">
+      <button id="minimize-btn">_</button>
+      <button id="maximize-btn">⬜</button>
+      <button id="close-btn">×</button>
+    </div>
+  </div>
+  <div class="navbar">
+    <button id="back-btn">&lt;</button>
+    <button id="forward-btn">&gt;</button>
+    <button id="reload-btn">⟳</button>
+    <button id="new-window-btn">+</button>
+    <input type="text" id="url-input" placeholder="Enter URL">
+    <button id="go-btn">Go</button>
+    <button id="theme-btn">🌓</button>
+  </div>
+  <div class="content">
+    <webview id="webview" src="https://www.google.co.in"></webview>
+  </div>
+</body>
+<script src="../scripts/renderer.js"></script>
+
+</html>
