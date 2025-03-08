@@ -6,7 +6,9 @@ const {
   globalShortcut,
   Menu,
 } = require("electron");
+const electron = require("electron");
 const path = require("path");
+const contextMenu = require("electron-context-menu").default;
 
 let mainWindow;
 
@@ -22,7 +24,7 @@ function createWindow() {
     autoHideMenuBar: true,
     frame: false,
     transparent: false,
-    fullscreen: true,
+    fullscreen: false,
     webPreferences: {
       webviewTag: true,
       nodeIntegration: false,
@@ -44,11 +46,6 @@ function createWindow() {
     });
     globalShortcut.register("CmdOrCtrl+Shift+R", () => {
       mainWindow.reload();
-    });
-    globalShortcut.register("CmdOrCtrl+Shift+I", () => {
-      if (mainWindow.webContents.isDevToolsOpened()) {
-        mainWindow.webContents.closeDevTools();
-      } else mainWindow.webContents.openDevTools();
     });
 
     globalShortcut.register("CmdOrCtrl+Shift+Left", () => {
@@ -75,7 +72,52 @@ function createWindow() {
     globalShortcut.unregisterAll();
   });
 
+  const template = [
+    {
+      label: "File",
+      submenu: [{ role: "quit" }],
+    },
+    {
+      label: "Edit",
+      submenu: [
+        { role: "undo" },
+        { role: "redo" },
+        { type: "separator" },
+        { role: "copy" },
+        { role: "paste" },
+      ],
+    },
+    {
+      label: "Actions",
+      submenu: [
+        {
+          label: "open devtools",
+          accelerator: "CmdOrCtrl+I",
+          click: () => {
+            if (mainWindow.webContents.isDevToolsOpened()) {
+              mainWindow.webContents.closeDevTools();
+            } else {
+              mainWindow.webContents.openDevTools({ mode: "detach" });
+            }
+          },
+        },
+        {
+          label: "guest devtools",
+          accelerator: "CmdOrCtrl+shift+I",
+          click: () => mainWindow.webContents.send("open-dev-tools"),
+        }, 
+        {
+          label: "reload",
+          accelerator: "CmdOrCtrl+R",
+          role: "reload"
+        }
+      ],
+    },
+    
+  ];
 
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
 }
 
 app.whenReady().then(() => {
@@ -105,4 +147,11 @@ ipcMain.on("close-window", () => {
 
 app.on("window-all-closed", () => {
   app.quit();
+});
+
+app.on("web-contents-created", (e, contents) => {
+  contextMenu({
+    window: contents,
+    showInspectElement: true,
+  });
 });

@@ -5,5 +5,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   minimizeWindow: () => ipcRenderer.send("minimize-window"),
   maximizeWindow: () => ipcRenderer.send("maximize-window"),
   closeWindow: () => ipcRenderer.send("close-window"),
-  createNewTab: (callback)=> ipcRenderer.on("create-new-tab", (_,response)=>callback(response)),
+  createNewTab: (callback) =>
+    ipcRenderer.on("create-new-tab", (_, response) => callback(response)),
+  openDevTools: (callback) =>
+    ipcRenderer.on("open-dev-tools", (_, response) => callback(response)),
 });

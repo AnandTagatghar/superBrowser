@@ -42,13 +42,15 @@ window.addEventListener("DOMContentLoaded", () => {
         .forEach((tab) => tab.classList.remove("active-tab"));
       webview.classList.remove("hidden");
       tabButton.classList.add("active-tab");
-      console.log(webview);
-      currentWebview = webview;
-      if(webview.getURL() === "about:blank") {
-        urlInput.value = "";
-      }else {
-        urlInput.value = webview.getURL();
-      }
+      webview.addEventListener("dom-ready", () => {
+        // console.log(webview);
+        currentWebview = webview;
+        if(webview.getURL() === "about:blank") {
+          urlInput.value = "";
+        }else {
+          urlInput.value = webview.getURL();
+        }
+      });
     }
     );
 
@@ -100,7 +102,7 @@ window.addEventListener("DOMContentLoaded", () => {
           : event.title;
     });
 
-    newWebview.addEventListener("did-start-loading", () => {
+    newWebview.addEventListener("did-stop-loading", () => {
       urlInput.value = newWebview.getURL();
     });
 
@@ -139,7 +141,7 @@ window.addEventListener("DOMContentLoaded", () => {
     window.electronAPI.closeWindow();
   });
 
-  currentWebview.addEventListener("did-start-loading", () => {
+  currentWebview.addEventListener("did-stop-loading", () => {
     urlInput.value = currentWebview.getURL();
   });
 
@@ -160,4 +162,10 @@ window.addEventListener("DOMContentLoaded", () => {
   window.electronAPI.createNewTab(() => {
     newWindowBtn.click();
   });
+
+  window.electronAPI.openDevTools(() => {
+    let webview = Array.from(webviewContainer.childNodes).filter(wv => wv.classList == "")[0];
+
+    webview.openDevTools();
+  })
 });
