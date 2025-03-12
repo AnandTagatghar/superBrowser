@@ -10,3 +10,13 @@ contextBridge.exposeInMainWorld("electronAPI", {
   openDevTools: (callback) =>
     ipcRenderer.on("open-dev-tools", (_, response) => callback(response)),
 });
+
+global.test = (() => {
+  const testing = () => {
+    console.log(`this is from the testing`);
+  };
+
+  return {
+    testing,
+  };
+})();

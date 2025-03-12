@@ -43,16 +43,14 @@ window.addEventListener("DOMContentLoaded", () => {
       webview.classList.remove("hidden");
       tabButton.classList.add("active-tab");
       webview.addEventListener("dom-ready", () => {
-        // console.log(webview);
         currentWebview = webview;
-        if(webview.getURL() === "about:blank") {
+        if (webview.getURL() === "about:blank") {
           urlInput.value = "";
-        }else {
+        } else {
           urlInput.value = webview.getURL();
         }
       });
-    }
-    );
+    });
 
     closeButton.addEventListener("click", (event) => {
       event.stopPropagation();
@@ -86,13 +84,13 @@ window.addEventListener("DOMContentLoaded", () => {
   newWindowBtn.addEventListener("click", () => {
     const newWebview = document.createElement("webview");
     newWebview.src = "https://www.google.co.in";
+    newWebview.preload = "../scripts/preload.js";
     newWebview.style.width = "100%";
     newWebview.style.height = "100%";
     newWebview.style.border = "none";
     newWebview.classList.add("hidden");
     webviewContainer.appendChild(newWebview);
 
-    
     const newTab = createTab(newWebview);
 
     newWebview.addEventListener("page-title-updated", (event) => {
@@ -164,8 +162,10 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   window.electronAPI.openDevTools(() => {
-    let webview = Array.from(webviewContainer.childNodes).filter(wv => wv.classList == "")[0];
+    let webview = Array.from(webviewContainer.childNodes).filter(
+      (wv) => wv.classList == ""
+    )[0];
 
     webview.openDevTools();
-  })
+  });
 });

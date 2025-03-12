@@ -5,16 +5,40 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "dev": "nodemon test.js",
+    "build": "electron-builder"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "build": {
+    "appId": "com.funwork.super-browser",
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.utilities",
+      "icon": "./src/public/icon/icon.icns"
+    },
+    "protocols": [
+      {
+        "name": "MyApp Protocol",
+        "schemes": [
+          "myapp"
+        ]
+      }
+    ]
+  },
   "dependencies": {
-    "electron": "^35.0.0",
-    "electron-context-menu": "^4.0.5"
+    "electron-context-menu": "^4.0.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
+    "electron": "^35.0.0",
+    "electron-builder": "^25.1.8",
     "nodemon": "^3.1.9"
   }
 }

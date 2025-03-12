@@ -1,3 +1,5 @@
+const path = require("path");
+const contextMenu = require("electron-context-menu").default();
 const {
   app,
   BrowserWindow,
@@ -6,9 +8,6 @@ const {
   globalShortcut,
   Menu,
 } = require("electron");
-const electron = require("electron");
-const path = require("path");
-const contextMenu = require("electron-context-menu").default;
 
 let mainWindow;
 
@@ -25,14 +24,15 @@ function createWindow() {
     frame: false,
     transparent: false,
     fullscreen: false,
+    icon: "./src/public/icon/icon.icns",
     webPreferences: {
       webviewTag: true,
       nodeIntegration: false,
       preload: path.join(__dirname, "/src/scripts/preload.js"),
     },
   });
+
   mainWindow.loadFile(path.join(__dirname, "/src/views/index.html"));
-  // mainWindow.webContents.openDevTools();
 
   let registerShortcuts = () => {
     globalShortcut.register("CmdOrCtrl+Shift+N", () => {
@@ -105,15 +105,14 @@ function createWindow() {
           label: "guest devtools",
           accelerator: "CmdOrCtrl+shift+I",
           click: () => mainWindow.webContents.send("open-dev-tools"),
-        }, 
+        },
         {
           label: "reload",
           accelerator: "CmdOrCtrl+R",
-          role: "reload"
-        }
+          role: "reload",
+        },
       ],
     },
-    
   ];
 
   const menu = Menu.buildFromTemplate(template);
